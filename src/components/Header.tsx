@@ -19,11 +19,11 @@ export const Header: React.FC<HeaderProps> = ({
   blockersCount,
   currentUser,
 }) => {
-  const todayFormatted = new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'short',
-    day: 'numeric',
+  const todayFormatted = new Date().toLocaleDateString('ja-JP', {
     year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'short',
   });
 
   return (
@@ -40,11 +40,11 @@ export const Header: React.FC<HeaderProps> = ({
                 AsyncStandup Hub
               </h1>
               <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
-                Remote Active
+                フルリモート稼働中
               </span>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2 mt-0.5">
-              <span>Engineering Core Team</span>
+              <span>プロダクト開発コアチーム</span>
               <span>•</span>
               <span className="font-medium text-slate-700 dark:text-slate-300">{todayFormatted}</span>
             </p>
@@ -57,7 +57,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 text-xs">
             <Globe className="h-3.5 w-3.5 text-indigo-500" />
             <span className="text-slate-600 dark:text-slate-300">
-              4 Timezones (UTC-8 ~ UTC+9)
+              全国フルリモート・非同期スタンドアップ
             </span>
           </div>
 
@@ -78,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({
                     {currentUser.name}
                   </span>
                   <span className="text-[10px] bg-indigo-600 text-white px-1.5 py-0.2 rounded font-semibold">
-                    You
+                    あなた
                   </span>
                 </div>
                 <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
@@ -94,7 +94,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm"
           >
             <MessageSquareShare className="h-4 w-4 text-emerald-500" />
-            <span>Slack Export</span>
+            <span>Slack共有</span>
           </button>
 
           {/* Post Standup Check-in button */}
@@ -103,7 +103,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md shadow-indigo-600/25 transition-all"
           >
             <Plus className="h-4 w-4" />
-            <span>Today's Standup</span>
+            <span>スタンドアップ入力</span>
           </button>
         </div>
       </div>

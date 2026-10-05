@@ -33,12 +33,12 @@ export const StandupCard: React.FC<StandupCardProps> = ({
   const [showCommentBox, setShowCommentBox] = useState(false);
 
   const moodConfig = {
-    great: { label: '🔥 On Fire', color: 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800' },
-    good: { label: '😊 Steady', color: 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800' },
-    neutral: { label: '😐 In Progress', color: 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700' },
-    tired: { label: '😴 Low Energy', color: 'bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800' },
-    blocked: { label: '🔴 Blocked', color: 'bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-800' },
-  }[standup.mood] || { label: 'Steady', color: 'bg-indigo-50 text-indigo-600' };
+    great: { label: '🔥 絶好調', color: 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800' },
+    good: { label: '😊 順調', color: 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800' },
+    neutral: { label: '😐 進行中', color: 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700' },
+    tired: { label: '😴 お疲れ気味', color: 'bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800' },
+    blocked: { label: '🔴 要フォロー', color: 'bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-800' },
+  }[standup.mood] || { label: '順調', color: 'bg-indigo-50 text-indigo-600' };
 
   const handleSubmitComment = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,7 +77,7 @@ export const StandupCard: React.FC<StandupCardProps> = ({
                   ? 'bg-indigo-500'
                   : 'bg-slate-400'
               }`}
-              title={`Status: ${standup.user.status}`}
+              title={`ステータス: ${standup.user.status}`}
             />
           </div>
 
@@ -88,7 +88,7 @@ export const StandupCard: React.FC<StandupCardProps> = ({
               </h3>
               {isCurrentUser && (
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-600 text-white shadow-sm">
-                  あなた (You)
+                  あなた
                 </span>
               )}
               {standup.user.githubUsername && (
@@ -117,7 +117,7 @@ export const StandupCard: React.FC<StandupCardProps> = ({
         <div className="flex items-center gap-2 self-start sm:self-auto">
           <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center gap-1">
             <Clock className="h-3 w-3" />
-            {standup.user.timezone.split(' ')[0]}
+            {standup.user.timezone}
           </span>
           <span className={`text-xs font-semibold px-2.5 py-1 rounded-lg border ${moodConfig.color}`}>
             {moodConfig.label}
@@ -131,7 +131,7 @@ export const StandupCard: React.FC<StandupCardProps> = ({
         <div className="space-y-2">
           <div className="flex items-center gap-1.5 text-slate-400 font-semibold uppercase tracking-wider text-[11px]">
             <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-            <span>Yesterday's Milestones</span>
+            <span>昨日の成果・完了タスク</span>
           </div>
           <div className="p-3.5 rounded-xl bg-slate-50/80 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/80 whitespace-pre-line text-slate-700 dark:text-slate-300 leading-relaxed font-sans">
             {standup.yesterday}
@@ -142,7 +142,7 @@ export const StandupCard: React.FC<StandupCardProps> = ({
         <div className="space-y-2">
           <div className="flex items-center gap-1.5 text-slate-400 font-semibold uppercase tracking-wider text-[11px]">
             <Calendar className="h-4 w-4 text-indigo-500" />
-            <span>Today's Commitments</span>
+            <span>今日の予定・コミットメント</span>
           </div>
           <div className="p-3.5 rounded-xl bg-slate-50/80 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/80 whitespace-pre-line text-slate-700 dark:text-slate-300 leading-relaxed font-sans">
             {standup.today}
@@ -155,7 +155,7 @@ export const StandupCard: React.FC<StandupCardProps> = ({
         <div className="mb-4 p-4 rounded-xl border border-rose-200 dark:border-rose-900/60 bg-rose-50/80 dark:bg-rose-950/30 text-rose-900 dark:text-rose-200 text-xs">
           <div className="flex items-center gap-2 font-bold mb-1 text-rose-600 dark:text-rose-400">
             <AlertTriangle className="h-4 w-4 flex-shrink-0" />
-            <span>Active Blocker — Needs Immediate Unblocking:</span>
+            <span>🚨 発生中のブロッカー（要サポート）:</span>
           </div>
           <p className="pl-6 text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
             {standup.blockers}
@@ -167,7 +167,7 @@ export const StandupCard: React.FC<StandupCardProps> = ({
       {standup.comments && standup.comments.length > 0 && (
         <div className="mt-2 mb-4 space-y-2 pt-3 border-t border-slate-100 dark:border-slate-800/80">
           <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
-            Team Responses & Solutions ({standup.comments.length})
+            チームからの解決策・返信 ({standup.comments.length})
           </span>
           {standup.comments.map((comment) => (
             <div
@@ -210,12 +210,12 @@ export const StandupCard: React.FC<StandupCardProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-all font-medium"
           >
             <MessageSquare className="h-3.5 w-3.5 text-slate-400" />
-            <span>Reply & Unblock</span>
+            <span>返信・サポート</span>
           </button>
         </div>
 
         <span className="text-[11px] text-slate-400 font-mono">
-          Posted for {standup.date}
+          投稿日: {standup.date}
         </span>
       </div>
 
@@ -224,7 +224,7 @@ export const StandupCard: React.FC<StandupCardProps> = ({
         <form onSubmit={handleSubmitComment} className="mt-3 flex items-center gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
           <input
             type="text"
-            placeholder="Offer a solution or reply to this standup..."
+            placeholder="解決策のアドバイスやサポート内容を入力..."
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
             className="flex-1 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
@@ -234,7 +234,7 @@ export const StandupCard: React.FC<StandupCardProps> = ({
             className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold flex items-center gap-1 transition-all"
           >
             <Send className="h-3 w-3" />
-            <span>Send</span>
+            <span>送信</span>
           </button>
         </form>
       )}

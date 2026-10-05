@@ -56,9 +56,9 @@ export async function GET(request: Request) {
             date: new Date().toISOString(),
           },
         ],
-        formattedMarkdown: `- Merged PR: \`fix(ui): Enable responsive internal scrolling for all modals\`
-- Pushed commit: \`feat: add global dashboard and hierarchy flow analytics\`
-- Pushed commit: \`feat: add live inflow streaming and interactive ARR simulator\``,
+        formattedMarkdown: `- PRマージ: \`fix(ui): 全モーダルの内部スクロール対応\` (mizoe0829/task-matrix)
+- コミット: \`feat: グローバルダッシュボードと階層分析UIの追加\` (mizoe0829/task-matrix)
+- コミット: \`chore: Next.js 15, Prisma, SQLite のセットアップ\` (mizoe0829/async-standup-hub)`,
       });
     }
 
@@ -80,7 +80,7 @@ export async function GET(request: Request) {
               url: `https://github.com/${repoName}/commit/${commit.sha || ''}`,
               date: ev.created_at,
             });
-            markdownLines.push(`- Pushed to \`${repoName}\`: ${title}`);
+            markdownLines.push(`- コミット: \`${title}\` (${repoName})`);
           }
         } else {
           // Push event without commit details in payload
@@ -94,14 +94,14 @@ export async function GET(request: Request) {
             url: `https://github.com/${repoName}`,
             date: ev.created_at,
           });
-          markdownLines.push(`- Pushed updates to \`${repoName}\` (${branch})`);
+          markdownLines.push(`- \`${repoName}\` (${branch}) に更新をプッシュ`);
         }
       } else if (ev.type === 'PullRequestEvent') {
         const repoName = ev.repo?.name || 'repository';
         const pr = ev.payload.pull_request;
         const prTitle = pr?.title || 'Feature update and review';
         const prNumber = pr?.number || '';
-        const prAction = ev.payload.action || 'updated';
+        const prAction = ev.payload.action === 'closed' ? 'マージ/クローズ' : ev.payload.action === 'opened' ? '作成' : '更新';
 
         activities.push({
           id: String(prNumber || ev.id),
@@ -111,13 +111,13 @@ export async function GET(request: Request) {
           url: pr?.html_url || `https://github.com/${repoName}/pulls`,
           date: ev.created_at,
         });
-        markdownLines.push(`- PR #${prNumber} (${prAction}): \`${prTitle}\` in ${repoName}`);
+        markdownLines.push(`- PR #${prNumber} (${prAction}): \`${prTitle}\` (${repoName})`);
       }
     }
 
     // Default if no push events in window
     if (markdownLines.length === 0) {
-      markdownLines.push(`- Active in repository \`${username}/task-matrix\` and reviewed PRs`);
+      markdownLines.push(`- \`${username}/task-matrix\` でのコードレビューと開発作業`);
     }
 
     return NextResponse.json({

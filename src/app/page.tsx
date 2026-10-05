@@ -14,12 +14,12 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [isCheckInOpen, setIsCheckInOpen] = useState(false);
   const [isSlackExportOpen, setIsSlackExportOpen] = useState(false);
-  const [regionFilter, setRegionFilter] = useState<'all' | 'asia' | 'europe' | 'americas'>('all');
+  const [workStyleFilter, setWorkStyleFilter] = useState<'all' | 'remote' | 'tokyo' | 'blocked'>('all');
 
   // Resolve current user as Ken Mizoe (@mizoe0829)
   const currentUser =
     standups.map((s) => s.user).find((u) => u.githubUsername === 'mizoe0829') ||
-    standups.find((s) => s.user.name === 'Ken Mizoe')?.user ||
+    standups.find((s) => s.user.name.includes('Ken Mizoe') || s.user.name.includes('溝江'))?.user ||
     standups[0]?.user;
 
   const currentUserId = currentUser?.id || '';
@@ -116,9 +116,9 @@ export default function HomePage() {
 
   const filteredStandups = standups
     .filter((s) => {
-      if (regionFilter === 'asia') return s.user.location.includes('Japan') || s.user.location.includes('Asia');
-      if (regionFilter === 'europe') return s.user.location.includes('UK') || s.user.location.includes('Germany');
-      if (regionFilter === 'americas') return s.user.location.includes('US') || s.user.location.includes('America');
+      if (workStyleFilter === 'remote') return s.user.location.includes('地方') || s.user.location.includes('リモート');
+      if (workStyleFilter === 'tokyo') return s.user.location.includes('東京') || s.user.location.includes('本社');
+      if (workStyleFilter === 'blocked') return s.hasBlocker;
       return true;
     })
     .sort((a, b) => {
@@ -159,29 +159,29 @@ export default function HomePage() {
           <div className="flex items-center gap-2">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
               <Users className="h-4 w-4 text-indigo-500" />
-              <span>Today's Distributed Standup Stream</span>
+              <span>本日の非同期スタンドアップ共有</span>
               <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                {standups.length} synced
+                {standups.length}名 連携完了
               </span>
             </h2>
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Region Filter */}
+            {/* Work Style Filter */}
             <div className="flex items-center p-1 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold">
               {(
                 [
-                  { id: 'all', label: 'All Regions' },
-                  { id: 'asia', label: 'Tokyo (UTC+9)' },
-                  { id: 'europe', label: 'Europe (UTC+0/+1)' },
-                  { id: 'americas', label: 'US West (UTC-8)' },
+                  { id: 'all', label: '全メンバー' },
+                  { id: 'remote', label: '地方フルリモート' },
+                  { id: 'tokyo', label: '東京本社' },
+                  { id: 'blocked', label: '要サポート' },
                 ] as const
               ).map((r) => (
                 <button
                   key={r.id}
-                  onClick={() => setRegionFilter(r.id)}
+                  onClick={() => setWorkStyleFilter(r.id)}
                   className={`px-2.5 py-1 rounded-lg transition-all ${
-                    regionFilter === r.id
+                    workStyleFilter === r.id
                       ? 'bg-indigo-600 text-white shadow-sm'
                       : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                   }`}
@@ -195,7 +195,7 @@ export default function HomePage() {
             <button
               onClick={fetchStandups}
               className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm"
-              title="Refresh standups"
+              title="データを再読み込み"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin text-indigo-500' : ''}`} />
             </button>
@@ -206,11 +206,11 @@ export default function HomePage() {
         <div className="space-y-5">
           {loading ? (
             <div className="py-16 text-center text-slate-400 text-xs">
-              Loading distributed standups from database...
+              スタンドアップデータを取得中...
             </div>
           ) : filteredStandups.length === 0 ? (
             <div className="py-16 text-center text-slate-400 text-xs">
-              No standups found for the selected region filter.
+              選択されたフィルターに一致するスタンドアップはありません。
             </div>
           ) : (
             filteredStandups.map((standup) => (

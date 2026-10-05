@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Seeding initial async standup data...');
+  console.log('Seeding Japanese domestic remote team data...');
 
   // Clear existing
   await prisma.comment.deleteMany({});
@@ -11,55 +11,55 @@ async function main() {
   await prisma.gitActivity.deleteMany({});
   await prisma.user.deleteMany({});
 
-  // 1. Create Users
+  // 1. Create Users (Domestic Remote Team)
   const user1 = await prisma.user.create({
     data: {
-      name: 'Ken Mizoe',
+      name: 'Ken Mizoe (溝江 研)',
       email: 'mizoe@example.com',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80',
       githubUsername: 'mizoe0829',
-      role: 'Fullstack Tech Lead',
-      timezone: 'Asia/Tokyo (UTC+9)',
-      location: 'Tokyo, Japan',
+      role: 'フルスタック / テックリード',
+      timezone: 'JST (フルフレックス・裁量)',
+      location: '地方フルリモート (北海道)',
       status: 'online',
     },
   });
 
   const user2 = await prisma.user.create({
     data: {
-      name: 'Sarah Jenkins',
-      email: 'sarah.j@remoteworks.io',
+      name: '佐藤 葵 (Aoi Sato)',
+      email: 'aoi.sato@example.com',
       avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&auto=format&fit=crop&q=80',
-      githubUsername: 'sjenkins-dev',
-      role: 'DevOps & Backend Engineer',
-      timezone: 'Europe/London (UTC+0)',
-      location: 'London, UK',
+      githubUsername: 'aoi-frontend',
+      role: 'フロントエンドエンジニア',
+      timezone: 'JST (9:00〜18:00)',
+      location: '地方フルリモート (福岡)',
       status: 'deep_work',
     },
   });
 
   const user3 = await prisma.user.create({
     data: {
-      name: 'Marcus Chen',
-      email: 'm.chen@hypergrid.design',
+      name: '田中 雄大 (Yudai Tanaka)',
+      email: 'tanaka.backend@example.com',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80',
-      githubUsername: 'marcus-c-ui',
-      role: 'Senior Product Designer',
-      timezone: 'America/Los_Angeles (UTC-8)',
-      location: 'San Francisco, US',
+      githubUsername: 'tanaka-backend',
+      role: 'バックエンド / SRE',
+      timezone: 'JST (10:00〜19:00)',
+      location: '東京 (本社ハイブリッド)',
       status: 'online',
     },
   });
 
   const user4 = await prisma.user.create({
     data: {
-      name: 'Elena Rostova',
-      email: 'elena@berlincloud.de',
+      name: '高橋 美咲 (Misaki Takahashi)',
+      email: 'misaki.design@example.com',
       avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120&auto=format&fit=crop&q=80',
-      githubUsername: 'elena-qa',
-      role: 'QA & Reliability Engineer',
-      timezone: 'Europe/Berlin (UTC+1)',
-      location: 'Berlin, Germany',
+      githubUsername: 'misaki-design',
+      role: 'UI/UXデザイナー & QA',
+      timezone: 'JST (時短フレックス 10:00〜16:00)',
+      location: '地方フルリモート (長野・育児フレックス)',
       status: 'offline',
     },
   });
@@ -71,12 +71,12 @@ async function main() {
     data: {
       userId: user1.id,
       date: today,
-      yesterday: `- Merged PR #42: \`feat: Add Global Dashboard & responsive modal controls\`
-- Reviewed Svelte-EC checkout pipeline
-- Refactored Prisma data models for async standup hub`,
-      today: `- Implement Next.js 15 Route Handlers for automated GitHub PR syncing
-- Build Blocker Radar UI component with urgent indicator tags
-- Set up Slack/Discord webhook export format`,
+      yesterday: `- PR #42 マージ: \`feat: Add Global Dashboard & responsive modal controls\`
+- Svelte-EC 決済パイプラインの動作検証とリファクタ
+- 非同期スタンドアップ用の Prisma スキーマ最適化`,
+      today: `- Next.js 15 Route Handlers による GitHub PR 自動同期機能の強化
+- チーム内の課題・詰まりを早期発見する「ブロッカー検知レーダー」UIの実装
+- Slack / Discord 向け非同期通知エクスポートフォーマットの策定`,
       blockers: null,
       hasBlocker: false,
       mood: 'great',
@@ -88,11 +88,11 @@ async function main() {
     data: {
       userId: user2.id,
       date: today,
-      yesterday: `- Set up Docker multi-stage build pipeline for Next.js and API services
-- Upgraded PostgreSQL connection pooling on staging`,
-      today: `- Verify Stripe production webhook signature validation
-- Benchmark Prisma query latency against staging DB`,
-      blockers: `Stripe webhook signing secret in staging keeps returning 400 Bad Signature. Blocked until DevOps access token is rotated.`,
+      yesterday: `- Next.js 15 App Router の Server/Client Components 境界見直し
+- Docker マルチステージビルドによるステージング環境のイメージ軽量化`,
+      today: `- Stripe 本番用 Webhook 署名検証ロジックの実装
+- ステージング DB（PostgreSQL）に対する Prisma クエリのレイテンシ検証`,
+      blockers: `ステージング環境の Stripe Webhook 署名シークレット更新で 400 Bad Signature が発生中。DevOpsの環境変数再適用待ちで結合テストがストップしています。`,
       hasBlocker: true,
       mood: 'blocked',
       reactions: 2,
@@ -103,10 +103,10 @@ async function main() {
     data: {
       userId: user3.id,
       date: today,
-      yesterday: `- Completed Figma design system components for Dark Mode
-- User testing on standup check-in mobile workflow`,
-      today: `- Polish glassmorphic badges and responsive sidebar navigation
-- Hand off mobile bottom-bar specs to Ken`,
+      yesterday: `- RDS PostgreSQL のコネクションプーリング設定見直し（PgBouncer）
+- ステージング環境の ECS Fargate オートスケーリング閾値調整`,
+      today: `- AWS Secrets Manager のアクセス権限再配布とローテーションテスト
+- API レスポンス高速化のための Redis キャッシュ層の設計`,
       blockers: null,
       hasBlocker: false,
       mood: 'good',
@@ -118,27 +118,27 @@ async function main() {
     data: {
       userId: user4.id,
       date: today,
-      yesterday: `- Automated Playwright E2E suite covering Standup submission
-- Verified cross-browser rendering on Safari and Chromium`,
-      today: `- Load testing on WebSocket edge telemetry
-- Add regression tests for timezone conversion`,
+      yesterday: `- ダークモード用デザイントークンの Figma コンポーネント整理
+- 非同期スタンドアップ投稿フローのスマホ実機ユーザビリティテスト`,
+      today: `- グラスモーフィズム調のステータスバッジのスタイルガイド作成
+- モバイル用ボトムナビゲーションの仕様を Ken さんに連携`,
       blockers: null,
       hasBlocker: false,
-      mood: 'neutral',
+      mood: 'good',
       reactions: 3,
     },
   });
 
-  // 3. Comments on blocker
+  // 3. Comments on blocker (Ken solving Aoi's blocker)
   await prisma.comment.create({
     data: {
       standupId: standup2.id,
       userId: user1.id,
-      content: 'Sarah, I have admin credentials for AWS Secrets Manager. Sending you the refreshed Stripe secret via 1Password vault right now!',
+      content: '佐藤さん、AWS Secrets Manager のステージング権限を先ほど更新しました！1Password の共有ボルトに最新の Stripe シークレットを展開したので確認をお願いします🙌',
     },
   });
 
-  // 4. Git Activities
+  // 4. Git Activities for Ken Mizoe
   await prisma.gitActivity.createMany({
     data: [
       {
@@ -162,17 +162,10 @@ async function main() {
         title: 'chore: initialize Next.js 15, Prisma schema and SQLite connection',
         url: 'https://github.com/mizoe0829/async-standup-hub/commit/1234def',
       },
-      {
-        userId: user2.id,
-        type: 'pr',
-        repo: 'org/backend-service',
-        title: 'PR #108: Optimize Docker Alpine build layer caching',
-        url: 'https://github.com/org/backend-service/pull/108',
-      },
     ],
   });
 
-  console.log('Seed completed successfully!');
+  console.log('Domestic remote team seed completed successfully!');
 }
 
 main()
