@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id             String        @id @default(cuid())
+  name           String
+  email          String        @unique
+  avatar         String
+  githubUsername String?
+  role           String        @default("Software Engineer")
+  timezone       String        @default("Asia/Tokyo (UTC+9)")
+  location       String        @default("Tokyo, Japan")
+  status         String        @default("online") // online, deep_work, offline
+  standups       Standup[]
+  gitActivities  GitActivity[]
+  comments       Comment[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model Standup {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date       String    // e.g. "2026-10-05"
+  yesterday  String    // Markdown text of what was completed
+  today      String    // Markdown text of planned goals
+  blockers   String?   // Description of obstacles
+  hasBlocker Boolean   @default(false)
+  mood       String    @default("good") // "great", "good", "neutral", "tired", "blocked"
+  reactions  Int       @default(0)
+  comments   Comment[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([userId, date])
+}
+
+model GitActivity {
+  id     String   @id @default(cuid())
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type   String   // "commit" | "pr"
+  repo   String   // e.g. "mizoe0829/task-matrix"
+  title  String
+  url    String
+  date   DateTime @default(now())
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  standupId String
+  standup   Standup  @relation(fields: [standupId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String
+  createdAt DateTime @default(now())
+}
