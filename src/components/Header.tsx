@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { GitPullRequest, Plus, MessageSquareShare, Sparkles, Clock, Globe, UserCheck, BarChart3, LayoutGrid } from 'lucide-react';
+import { GitPullRequest, Plus, MessageSquareShare, Sparkles, Clock, Globe, UserCheck, BarChart3, LayoutGrid, FolderGit2 } from 'lucide-react';
 import { User } from '@/types';
 
 interface HeaderProps {
@@ -56,32 +56,40 @@ export const Header: React.FC<HeaderProps> = ({
           </Link>
         </div>
 
-        {/* Center: Main Navigation Tabs (Timeline vs Dashboard) */}
+        {/* Center: Main Navigation Tabs */}
         <nav className="flex items-center p-1 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 text-xs font-semibold self-start md:self-auto shadow-inner">
           <Link
             href="/"
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all ${
-              pathname === '/'
-                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm font-bold'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
-          >
-            <LayoutGrid className="h-3.5 w-3.5" />
-            <span>タイムライン</span>
-          </Link>
-          <Link
-            href="/dashboard"
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all ${
-              pathname.startsWith('/dashboard')
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
+              pathname === '/' || pathname === '/dashboard'
                 ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm font-bold'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <BarChart3 className="h-3.5 w-3.5" />
-            <span>ダッシュボード</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-600 dark:text-indigo-400 font-medium">
-              全体+PJ別
-            </span>
+            <span>全体ダッシュボード</span>
+          </Link>
+          <Link
+            href="/task"
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
+              pathname.startsWith('/task') || pathname.startsWith('/projects')
+                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm font-bold'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <FolderGit2 className="h-3.5 w-3.5" />
+            <span>個別PJ (TaskMatrix)</span>
+          </Link>
+          <Link
+            href="/standups"
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
+              pathname === '/standups'
+                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm font-bold'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <LayoutGrid className="h-3.5 w-3.5" />
+            <span>スタンドアップ共有</span>
           </Link>
         </nav>
 
