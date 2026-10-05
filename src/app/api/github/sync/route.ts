@@ -67,31 +67,51 @@ export async function GET(request: Request) {
     const markdownLines: string[] = [];
 
     for (const ev of events) {
-      if (ev.type === 'PushEvent' && ev.payload.commits) {
-        for (const commit of ev.payload.commits.slice(0, 2)) {
-          // clean commit message (first line)
-          const title = commit.message.split('\n')[0];
+      if (ev.type === 'PushEvent') {
+        const repoName = ev.repo?.name || 'repository';
+        if (ev.payload.commits && ev.payload.commits.length > 0) {
+          for (const commit of ev.payload.commits.slice(0, 2)) {
+            const title = commit.message ? commit.message.split('\n')[0] : `Pushed commit to ${repoName}`;
+            activities.push({
+              id: commit.sha || String(Date.now()),
+              type: 'commit',
+              repo: repoName,
+              title,
+              url: `https://github.com/${repoName}/commit/${commit.sha || ''}`,
+              date: ev.created_at,
+            });
+            markdownLines.push(`- Pushed to \`${repoName}\`: ${title}`);
+          }
+        } else {
+          // Push event without commit details in payload
+          const branch = ev.payload.ref ? ev.payload.ref.replace('refs/heads/', '') : 'main';
+          const title = `Pushed updates to ${branch}`;
           activities.push({
-            id: commit.sha,
+            id: ev.id,
             type: 'commit',
-            repo: ev.repo.name,
+            repo: repoName,
             title,
-            url: `https://github.com/${ev.repo.name}/commit/${commit.sha}`,
+            url: `https://github.com/${repoName}`,
             date: ev.created_at,
           });
-          markdownLines.push(`- Pushed to \`${ev.repo.name}\`: ${title}`);
+          markdownLines.push(`- Pushed updates to \`${repoName}\` (${branch})`);
         }
-      } else if (ev.type === 'PullRequestEvent' && ev.payload.pull_request) {
+      } else if (ev.type === 'PullRequestEvent') {
+        const repoName = ev.repo?.name || 'repository';
         const pr = ev.payload.pull_request;
+        const prTitle = pr?.title || 'Feature update and review';
+        const prNumber = pr?.number || '';
+        const prAction = ev.payload.action || 'updated';
+
         activities.push({
-          id: String(pr.number),
+          id: String(prNumber || ev.id),
           type: 'pr',
-          repo: ev.repo.name,
-          title: `PR #${pr.number}: ${pr.title}`,
-          url: pr.html_url,
+          repo: repoName,
+          title: `PR #${prNumber}: ${prTitle}`,
+          url: pr?.html_url || `https://github.com/${repoName}/pulls`,
           date: ev.created_at,
         });
-        markdownLines.push(`- PR #${pr.number} (${ev.payload.action}): \`${pr.title}\` in ${ev.repo.name}`);
+        markdownLines.push(`- PR #${prNumber} (${prAction}): \`${prTitle}\` in ${repoName}`);
       }
     }
 

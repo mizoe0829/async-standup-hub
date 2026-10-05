@@ -16,8 +16,13 @@ export default function HomePage() {
   const [isSlackExportOpen, setIsSlackExportOpen] = useState(false);
   const [regionFilter, setRegionFilter] = useState<'all' | 'asia' | 'europe' | 'americas'>('all');
 
-  // Hardcoded current user for demonstration: Ken Mizoe
-  const currentUserId = 'user1_mock_id';
+  // Resolve current user as Ken Mizoe (@mizoe0829)
+  const currentUser =
+    standups.map((s) => s.user).find((u) => u.githubUsername === 'mizoe0829') ||
+    standups.find((s) => s.user.name === 'Ken Mizoe')?.user ||
+    standups[0]?.user;
+
+  const currentUserId = currentUser?.id || '';
 
   // Fetch standups from API
   const fetchStandups = async () => {
@@ -39,7 +44,7 @@ export default function HomePage() {
     fetchStandups();
   }, []);
 
-  // Handle new standup submission
+  // Handle new standup submission for Ken Mizoe
   const handleSubmitStandup = async (formData: {
     yesterday: string;
     today: string;
@@ -47,13 +52,12 @@ export default function HomePage() {
     mood: string;
   }) => {
     try {
-      // Find or default to user 1
-      const defaultUser = standups[0]?.user;
+      if (!currentUser) return;
       const res = await fetch('/api/standups', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: defaultUser ? defaultUser.id : 'temp_user',
+          userId: currentUser.id,
           yesterday: formData.yesterday,
           today: formData.today,
           blockers: formData.blockers,
@@ -87,10 +91,9 @@ export default function HomePage() {
     }
   };
 
-  // Handle adding comment to standup
+  // Handle adding comment to standup as Ken Mizoe
   const handleAddComment = async (standupId: string, content: string) => {
-    const defaultUser = standups[0]?.user;
-    if (!defaultUser) return;
+    if (!currentUser) return;
 
     try {
       const res = await fetch('/api/comments', {
@@ -98,7 +101,7 @@ export default function HomePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           standupId,
-          userId: defaultUser.id,
+          userId: currentUser.id,
           content,
         }),
       });
@@ -111,12 +114,21 @@ export default function HomePage() {
     }
   };
 
-  const filteredStandups = standups.filter((s) => {
-    if (regionFilter === 'asia') return s.user.location.includes('Japan') || s.user.location.includes('Asia');
-    if (regionFilter === 'europe') return s.user.location.includes('UK') || s.user.location.includes('Germany');
-    if (regionFilter === 'americas') return s.user.location.includes('US') || s.user.location.includes('America');
-    return true;
-  });
+  const filteredStandups = standups
+    .filter((s) => {
+      if (regionFilter === 'asia') return s.user.location.includes('Japan') || s.user.location.includes('Asia');
+      if (regionFilter === 'europe') return s.user.location.includes('UK') || s.user.location.includes('Germany');
+      if (regionFilter === 'americas') return s.user.location.includes('US') || s.user.location.includes('America');
+      return true;
+    })
+    .sort((a, b) => {
+      // Pin current user (Ken Mizoe) to the top of the feed for clear personal perspective
+      const isA = a.user.githubUsername === 'mizoe0829' || a.userId === currentUser?.id;
+      const isB = b.user.githubUsername === 'mizoe0829' || b.userId === currentUser?.id;
+      if (isA && !isB) return -1;
+      if (!isA && isB) return 1;
+      return 0;
+    });
 
   const blockersCount = standups.filter((s) => s.hasBlocker).length;
 
@@ -128,6 +140,7 @@ export default function HomePage() {
         onOpenSlackExport={() => setIsSlackExportOpen(true)}
         standupsCount={standups.length}
         blockersCount={blockersCount}
+        currentUser={currentUser}
       />
 
       {/* Main Body */}
@@ -205,6 +218,7 @@ export default function HomePage() {
                 key={standup.id}
                 standup={standup}
                 currentUserId={currentUserId}
+                isCurrentUser={standup.user.githubUsername === 'mizoe0829' || standup.userId === currentUser?.id}
                 onReact={handleReact}
                 onAddComment={handleAddComment}
               />

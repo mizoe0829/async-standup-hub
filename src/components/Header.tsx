@@ -1,13 +1,15 @@
 'use client';
 
 import React from 'react';
-import { GitPullRequest, Plus, MessageSquareShare, Sparkles, Clock, Globe } from 'lucide-react';
+import { GitPullRequest, Plus, MessageSquareShare, Sparkles, Clock, Globe, UserCheck } from 'lucide-react';
+import { User } from '@/types';
 
 interface HeaderProps {
   onOpenCheckIn: () => void;
   onOpenSlackExport: () => void;
   standupsCount: number;
   blockersCount: number;
+  currentUser?: User | null;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -15,6 +17,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenSlackExport,
   standupsCount,
   blockersCount,
+  currentUser,
 }) => {
   const todayFormatted = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
@@ -24,7 +27,7 @@ export const Header: React.FC<HeaderProps> = ({
   });
 
   return (
-    <header className="sticky top-0 z-30 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-4 sm:px-8 py-4 transition-colors">
+    <header className="sticky top-0 z-30 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-4 sm:px-8 py-3.5 transition-colors">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         {/* Left: Branding & Team Info */}
         <div className="flex items-center gap-3.5">
@@ -48,15 +51,42 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Right: Quick Stats & Actions */}
+        {/* Right: Quick Stats, Current User & Actions */}
         <div className="flex items-center gap-3 flex-wrap">
           {/* Status summary tag */}
-          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 text-xs">
+          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 text-xs">
             <Globe className="h-3.5 w-3.5 text-indigo-500" />
             <span className="text-slate-600 dark:text-slate-300">
               4 Timezones (UTC-8 ~ UTC+9)
             </span>
           </div>
+
+          {/* Logged in User Pill */}
+          {currentUser && (
+            <div className="flex items-center gap-2 px-2.5 py-1 rounded-xl border border-indigo-200 dark:border-indigo-800/60 bg-indigo-50/50 dark:bg-indigo-950/30 text-xs">
+              <div className="relative">
+                <img
+                  src={currentUser.avatar}
+                  alt={currentUser.name}
+                  className="h-6 w-6 rounded-full object-cover ring-1 ring-indigo-500"
+                />
+                <span className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-slate-900" />
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1 leading-tight">
+                  <span className="font-bold text-slate-900 dark:text-white">
+                    {currentUser.name}
+                  </span>
+                  <span className="text-[10px] bg-indigo-600 text-white px-1.5 py-0.2 rounded font-semibold">
+                    You
+                  </span>
+                </div>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
+                  @{currentUser.githubUsername}
+                </span>
+              </div>
+            </div>
+          )}
 
           {/* Export to Slack button */}
           <button

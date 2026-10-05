@@ -17,6 +17,7 @@ import {
 interface StandupCardProps {
   standup: Standup;
   currentUserId: string;
+  isCurrentUser?: boolean;
   onReact: (standupId: string) => void;
   onAddComment: (standupId: string, content: string) => void;
 }
@@ -24,6 +25,7 @@ interface StandupCardProps {
 export const StandupCard: React.FC<StandupCardProps> = ({
   standup,
   currentUserId,
+  isCurrentUser = false,
   onReact,
   onAddComment,
 }) => {
@@ -51,6 +53,8 @@ export const StandupCard: React.FC<StandupCardProps> = ({
       className={`rounded-2xl border transition-all duration-200 p-5 sm:p-6 shadow-sm ${
         standup.hasBlocker
           ? 'border-rose-300 dark:border-rose-800/80 bg-rose-50/20 dark:bg-slate-900/90 ring-1 ring-rose-500/20'
+          : isCurrentUser
+          ? 'border-indigo-300 dark:border-indigo-800 bg-white dark:bg-slate-900/90 ring-1 ring-indigo-500/30 shadow-indigo-500/5'
           : 'border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/90'
       }`}
     >
@@ -61,7 +65,9 @@ export const StandupCard: React.FC<StandupCardProps> = ({
             <img
               src={standup.user.avatar}
               alt={standup.user.name}
-              className="h-11 w-11 rounded-full object-cover ring-2 ring-indigo-500/20"
+              className={`h-11 w-11 rounded-full object-cover ring-2 ${
+                isCurrentUser ? 'ring-indigo-500' : 'ring-indigo-500/20'
+              }`}
             />
             <span
               className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full ring-2 ring-white dark:ring-slate-900 ${
@@ -80,6 +86,11 @@ export const StandupCard: React.FC<StandupCardProps> = ({
               <h3 className="text-base font-bold text-slate-900 dark:text-white">
                 {standup.user.name}
               </h3>
+              {isCurrentUser && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-600 text-white shadow-sm">
+                  あなた (You)
+                </span>
+              )}
               {standup.user.githubUsername && (
                 <a
                   href={`https://github.com/${standup.user.githubUsername}`}
