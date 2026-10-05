@@ -59,13 +59,13 @@ const allProjects: Record<string, ProjectDetail> = {
       {
         name: 'Ken Mizoe (溝江 研)',
         role: 'フルスタック / テックリード',
-        avatar: 'https://github.com/mizoe0829.png',
+        avatar: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=120&auto=format&fit=crop&q=80', // 柴犬 🐶
         location: '地方フルリモート (北海道)',
       },
       {
         name: '高橋 美咲 (Misaki Takahashi)',
         role: 'UI/UXデザイナー & QA',
-        avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=120&auto=format&fit=crop&q=80',
+        avatar: 'https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=120&auto=format&fit=crop&q=80', // ウサギ 🐰
         location: '地方フルリモート (長野・時短フレックス)',
       },
     ],
@@ -112,13 +112,13 @@ const allProjects: Record<string, ProjectDetail> = {
       {
         name: 'Ken Mizoe (溝江 研)',
         role: 'フルスタック / テックリード',
-        avatar: 'https://github.com/mizoe0829.png',
+        avatar: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=120&auto=format&fit=crop&q=80', // 柴犬 🐶
         location: '地方フルリモート (北海道)',
       },
       {
         name: '田中 雄大 (Yudai Tanaka)',
         role: 'バックエンド / SRE',
-        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80',
+        avatar: 'https://images.unsplash.com/photo-1598439210625-5067c578f3f6?w=120&auto=format&fit=crop&q=80', // ペンギン 🐧
         location: '東京 (本社ハイブリッド)',
       },
     ],
@@ -164,19 +164,19 @@ const allProjects: Record<string, ProjectDetail> = {
       {
         name: '佐藤 葵 (Aoi Sato)',
         role: 'フロントエンドエンジニア',
-        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80',
+        avatar: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=120&auto=format&fit=crop&q=80', // 猫 🐱
         location: '地方フルリモート (福岡)',
       },
       {
         name: 'Ken Mizoe (溝江 研)',
         role: 'フルスタック / テックリード',
-        avatar: 'https://github.com/mizoe0829.png',
+        avatar: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=120&auto=format&fit=crop&q=80', // 柴犬 🐶
         location: '地方フルリモート (北海道)',
       },
       {
         name: '田中 雄大 (Yudai Tanaka)',
         role: 'バックエンド / SRE',
-        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80',
+        avatar: 'https://images.unsplash.com/photo-1598439210625-5067c578f3f6?w=120&auto=format&fit=crop&q=80', // ペンギン 🐧
         location: '東京 (本社ハイブリッド)',
       },
     ],
@@ -218,13 +218,13 @@ const allProjects: Record<string, ProjectDetail> = {
       {
         name: '田中 雄大 (Yudai Tanaka)',
         role: 'バックエンド / SRE',
-        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80',
+        avatar: 'https://images.unsplash.com/photo-1598439210625-5067c578f3f6?w=120&auto=format&fit=crop&q=80', // ペンギン 🐧
         location: '東京 (本社ハイブリッド)',
       },
       {
         name: '佐藤 葵 (Aoi Sato)',
         role: 'フロントエンドエンジニア',
-        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80',
+        avatar: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=120&auto=format&fit=crop&q=80', // 猫 🐱
         location: '地方フルリモート (福岡)',
       },
     ],

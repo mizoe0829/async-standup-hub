@@ -11,12 +11,12 @@ async function main() {
   await prisma.gitActivity.deleteMany({});
   await prisma.user.deleteMany({});
 
-  // 1. Create Users (Domestic Remote Team)
+  // 1. Create Users (Domestic Remote Team with friendly animal avatars)
   const user1 = await prisma.user.create({
     data: {
       name: 'Ken Mizoe (溝江 研)',
       email: 'mizoe@example.com',
-      avatar: 'https://github.com/mizoe0829.png',
+      avatar: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=120&auto=format&fit=crop&q=80', // 柴犬 🐶
       githubUsername: 'mizoe0829',
       role: 'フルスタック / テックリード',
       timezone: 'JST (フルフレックス・裁量)',
@@ -29,7 +29,7 @@ async function main() {
     data: {
       name: '佐藤 葵 (Aoi Sato)',
       email: 'aoi.sato@example.com',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80',
+      avatar: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=120&auto=format&fit=crop&q=80', // 猫 🐱
       githubUsername: 'aoi-frontend',
       role: 'フロントエンドエンジニア',
       timezone: 'JST (9:00〜18:00)',
@@ -42,7 +42,7 @@ async function main() {
     data: {
       name: '田中 雄大 (Yudai Tanaka)',
       email: 'tanaka.backend@example.com',
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80',
+      avatar: 'https://images.unsplash.com/photo-1598439210625-5067c578f3f6?w=120&auto=format&fit=crop&q=80', // ペンギン 🐧
       githubUsername: 'tanaka-backend',
       role: 'バックエンド / SRE',
       timezone: 'JST (10:00〜19:00)',
@@ -55,7 +55,7 @@ async function main() {
     data: {
       name: '高橋 美咲 (Misaki Takahashi)',
       email: 'misaki.design@example.com',
-      avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=120&auto=format&fit=crop&q=80',
+      avatar: 'https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=120&auto=format&fit=crop&q=80', // ウサギ 🐰
       githubUsername: 'misaki-design',
       role: 'UI/UXデザイナー & QA',
       timezone: 'JST (時短フレックス 10:00〜16:00)',
