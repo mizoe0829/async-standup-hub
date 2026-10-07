@@ -5,6 +5,7 @@ interface GitHubEvent {
   type: string;
   repo: { name: string; url: string };
   payload: {
+    ref?: string;
     commits?: Array<{ sha: string; message: string }>;
     pull_request?: { title: string; html_url: string; state: string; number: number };
     action?: string;
